@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+    
+    :root {
+      --bg: #121212;
+      --surface: #1e1e1e;
+      --border: #333333;
+      --text: #ffffff;
+      --text-muted: #888888;
+      --accent: #4dabf7;
+    }
+    
+    body {
+      margin: 0;
+      padding: 24px 20px;
+      width: 280px;
+      background: var(--bg);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--surface);
+      padding: 4px;
+      box-sizing: border-box;
+      border: 1px solid var(--border);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    .header p {
+      margin: 3px 0 0 0;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .section {
+      background: var(--surface);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .row:last-child {
+      border-bottom: none;
+    }
+    .row:hover {
+      background: rgba(255, 255, 255, 0.04);
+    }
+    
+    .row.no-hover {
+      cursor: default;
+    }
+    .row.no-hover:hover {
+      background: transparent;
+    }
+
+    .label {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .value {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Toggle Switch */
+    .toggle {
+      position: relative;
+      width: 40px;
+      height: 24px;
+    }
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #3a3a3a;
+      transition: .3s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: var(--accent);
+    }
+    input:checked + .slider:before {
+      transform: translateX(16px);
+    }
+
+    /* Hidden Sections */
+    .expandable {
+      display: none;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid var(--border);
+    }
+    .expandable.active {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      box-sizing: border-box;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]:focus {
+      border-color: var(--accent);
+    }
+
+    button {
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+    button.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    button.secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .log-entry {
+      font-size: 12px;
+      color: var(--text-muted);
+      border-bottom: 1px dotted var(--border);
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+    }
+    .log-entry:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .log-time {
+      color: var(--text);
+      font-weight: 500;
+      margin-right: 6px;
+    }
+    #logs-container {
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
+    /* Reels Lock Duration Slider */
+    .lock-duration-row {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .lock-duration-row:last-child {
+      border-bottom: none;
+    }
+    .lock-duration-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .lock-duration-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      background: rgba(77, 171, 247, 0.1);
+      border: 1px solid rgba(77, 171, 247, 0.25);
+      border-radius: 8px;
+      padding: 3px 10px;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 4px;
+      border-radius: 4px;
+      background: #3a3a3a;
+      outline: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(77, 171, 247, 0.5);
+      transition: box-shadow 0.2s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      box-shadow: 0 0 14px rgba(77, 171, 247, 0.8);
+    }
+    .lock-duration-range-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <img src="icon128.png" alt="Icon">
+    <div>
+      <h1>Anti Productive</h1>
+      <p>Stay Less Productive</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="row no-hover">
+      <span class="label">Enable Extension</span>
+      <label class="toggle">
+        <input type="checkbox" id="toggle-enabled">
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Reels Lock Duration -->
+  <div class="section">
+    <div class="lock-duration-row">
+      <div class="lock-duration-header">
+        <span class="label">Reels Lock Duration (Close Window)</span>
+        <span class="lock-duration-value" id="lock-duration-display">30s</span>
+      </div>
+      <input type="range" id="lock-duration-slider" min="10" max="300" step="5" value="30">
+      <div class="lock-duration-range-labels">
+        <span>10s</span>
+        <span>5 min</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="row" id="btn-api-key">
+      <span class="label">API Key</span>
+      <span class="value" id="api-status">Not Set</span>
+    </div>
+    <div class="expandable" id="sec-api-key">
+      <input type="text" id="input-api-key" placeholder="Gemini API Key">
+      <button id="save-api-key">Save Key</button>
+    </div>
+
+    <div class="row" id="btn-logs">
+      <span class="label">View Logs</span>
+      <span class="value" id="log-count">0</span>
+    </div>
+    <div class="expandable" id="sec-logs">
+      <div id="logs-container">
+        <div class="log-entry">No logs yet.</div>
+      </div>
+      <button class="secondary" id="clear-logs">Clear Logs</button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
