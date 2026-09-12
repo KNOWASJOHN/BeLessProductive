@@ -145,7 +145,7 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
   try {
     const storage = await chrome.storage.local.get({
       enabled: true,
-      apiKey: "AIzaSyDIrDK9EDo8EkdGo39phHzcmfZ3e8EfXwI"
+      apiKey: "PASTE_YOUR_GEMINI_API_KEY_HERE"
     });
 
     if (!storage.enabled || !storage.apiKey || storage.apiKey.startsWith("PASTE_")) return;
